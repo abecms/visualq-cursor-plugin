@@ -1,0 +1,23 @@
+{
+  "name": "visualq",
+  "owner": {
+    "name": "VisualQ"
+  },
+  "metadata": {
+    "description": "VisualQ Quality MCP plugins for Cursor and Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "visualq",
+      "description": "Quality MCP for coding agents",
+      "version": "1.0.0",
+      "source": "./",
+      "license": "MIT",
+      "homepage": "https://visualq.ai",
+      "repository": "https://github.com/abecms/visualq-cursor-plugin",
+      "keywords": ["qa", "mcp", "vrt", "frt"],
+      "category": "testing"
+    }
+  ]
+}

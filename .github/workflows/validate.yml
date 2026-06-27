@@ -1,0 +1,28 @@
+name: Validate plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Cursor plugin manifest
+        run: test -f .cursor-plugin/plugin.json
+
+      - name: Check Claude plugin manifest
+        run: test -f .claude-plugin/plugin.json && test -f .claude-plugin/marketplace.json
+
+      - name: Check skills have frontmatter
+        run: |
+          for f in skills/*/SKILL.md; do
+            head -1 "$f" | grep -q '^---$' || (echo "Missing frontmatter: $f" && exit 1)
+            grep -q '^name:' "$f" || (echo "Missing name in $f" && exit 1)
+          done
+
+      - name: Check MCP template has placeholder key
+        run: grep -q 'vq_org_live_YOUR_KEY_HERE' mcp.json

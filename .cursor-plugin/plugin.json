@@ -1,0 +1,13 @@
+{
+  "name": "visualq",
+  "description": "Quality MCP for coding agents — VRT, FRT, rolling health, PR gates",
+  "version": "1.0.0",
+  "author": {
+    "name": "VisualQ",
+    "email": "support@visualq.ai"
+  },
+  "keywords": ["qa", "vrt", "mcp", "testing", "visual-regression", "frt"],
+  "homepage": "https://visualq.ai/docs/integrations/mcp",
+  "repository": "https://github.com/abecms/visualq-cursor-plugin",
+  "license": "MIT"
+}

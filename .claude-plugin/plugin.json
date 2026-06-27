@@ -1,0 +1,33 @@
+{
+  "name": "visualq",
+  "description": "Quality MCP for Claude Code — VRT, FRT, rolling health, PR gates",
+  "version": "1.0.0",
+  "author": {
+    "name": "VisualQ"
+  },
+  "mcpServers": {
+    "visualq": {
+      "command": "npx",
+      "args": ["-y", "@visualq/mcp"],
+      "env": {
+        "VISUALQ_API_KEY": "${userConfig.apiKey}",
+        "VISUALQ_BASE_URL": "https://visualq.ai",
+        "VISUALQ_TOOL_PROFILE": "vrt-qa"
+      }
+    }
+  },
+  "userConfig": {
+    "apiKey": {
+      "type": "string",
+      "title": "VisualQ Org Agent API Key",
+      "description": "Create at visualq.ai → Settings → Agent API Keys (vq_org_live_…, mcp_full scope)",
+      "required": true
+    },
+    "defaultProject": {
+      "type": "string",
+      "title": "Default project slug",
+      "description": "Optional — passed as VISUALQ_DEFAULT_PROJECT",
+      "required": false
+    }
+  }
+}
