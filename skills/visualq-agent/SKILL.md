@@ -8,7 +8,7 @@ description: >-
 
 # VisualQ Agent Workflows — Quality MCP for Coding Agents
 
-VisualQ is **the Quality MCP** for Cursor, Claude Code, and CI agents. Install `@visualq/mcp` alongside Playwright MCP:
+VisualQ is a **Quality OS**; **`@visualq/mcp`** is the agent interface for Cursor, Claude Code, and CI agents. Install it alongside Playwright MCP:
 
 - **Playwright MCP** — local browser exploration (hands + eyes)
 - **VisualQ MCP** — persistent quality memory, gates, baselines, multi-pillar audits, FRT contracts, rolling health
@@ -63,12 +63,11 @@ Always use `get_site_health` / `get_quality_score` for project KPIs. **Never** t
 ## Workflow: FRT from user story (`frt-journey-from-goal` prompt)
 
 1. `frt_search_step_library` — reuse existing steps
-2. `frt_propose_journey` with goal + startUrl (async — poll `get_job_status`)
-3. Review proposed Gherkin; edit if needed
-4. `frt_save_feature_draft` with `confirm: true`
-5. `frt_compile_feature` — fix compile errors at source (prompts/binding), never silent fallback
-6. `run_frt_feature` with `confirm: true`
-7. `frt_explain_failure` on any red steps
+2. Optional: `frt_inspect_page` for grounded labels/selectors
+3. **`frt_save_feature_draft` with `confirm: true` immediately** — do not paste Gherkin for manual import
+4. `frt_compile_feature` with `project` — fix compile errors at source (prompts/binding), never silent fallback
+5. `run_frt_feature` with `confirm: true`
+6. `frt_explain_failure` on any red steps
 
 ## Workflow: Jira ticket QA (`jira-qa` prompt)
 

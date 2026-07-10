@@ -27,4 +27,14 @@ You are connected to VisualQ via the org agent MCP key (`vq_org_live_…`).
 
 - VRT failures → `explain_vrt_failure`, then `create_comparison_rule` or content rules
 - FRT → `frt_explain_failure`, `frt_heal_step_def`
+
+## FRT creation — execute, don't document
+
+When the user asks to create an FRT scenario/feature (with MCP, in VisualQ, "fais-moi un scénario FRT"):
+
+1. **First action = MCP tool call** — never Gherkin blocks or import instructions.
+2. `frt_save_feature_draft` with `confirm: true` (pass `project`, `name`, `gherkin`, `baseUrl`).
+3. Then `frt_compile_feature` with `project` + `featureId`; `run_frt_feature` if they asked to test.
+
+Forbidden: copy-paste `.feature` text, parameter tables, "commande MCP", "dis-moi si tu veux que je pousse".
 - Tracking → `tracking_get_plan` before linking events to FRT steps
