@@ -12,29 +12,32 @@ You are connected to VisualQ via the org agent MCP key (`vq_org_live_…`).
 
 1. **Always pass `project`** (slug) on every tool unless the user gave a single obvious project. Example: `{ "project": "guerlain", "environment": "staging" }`.
 2. **Mutating tools** need `confirm: true` (approve results, create scenario, create project, post PR comment, etc.).
-3. **Long runs**: after `run_vrt` / `run_baseline`, call `wait_for_run`. After async tools (`crawl_site`, …), poll `get_job_status`.
+3. **Long runs**: after `run_vrt` / `run_baseline`, call `wait_for_run`. After async tools (`crawl_site`, `tracking_prove_jira_ticket`, …), poll `get_job_status`.
 4. **Follow `nextActions`** in tool responses when present.
 5. **CI vs agent**: do not use org keys for raw `/api/ci` curl — use MCP tools only.
 6. **Rolling health**: use `get_site_health` / `gate_pr_quality` — never a single run as site score.
+7. **Pillar audits**: use `run_full_audit` with `pillars[]` — no separate `run_a11y` / `run_tracking` tools.
 
 ## Workflows
 
 - **Pre-merge**: prompt `pre-merge-check` or `pr-quality-gate`
 - **New client site**: prompt `onboard-new-site`
 - **Diff diagnosis**: prompt `diagnose-vrt-failure`
+- **JIRA tracking proof**: prompt `jira-tracking-proof`
 
 ## Pillar hints
 
 - VRT failures → `explain_vrt_failure`, then `create_comparison_rule` or content rules
 - FRT → `frt_explain_failure`, `frt_heal_step_def`
+- Tracking → `tracking_get_plan` before linking events to FRT steps; JIRA tickets → `tracking_prove_jira_ticket` only
 
 ## FRT creation — execute, don't document
 
 When the user asks to create an FRT scenario/feature (with MCP, in VisualQ, "fais-moi un scénario FRT"):
 
 1. **First action = MCP tool call** — never Gherkin blocks or import instructions.
-2. `frt_save_feature_draft` with `confirm: true` (pass `project`, `name`, `gherkin`, `baseUrl`).
-3. Then `frt_compile_feature` with `project` + `featureId`; `run_frt_feature` if they asked to test.
+2. `frt_find_scenarios(query=<goal>)` — reuse when strong match or same ticket id.
+3. `create_frt_scenario(goal=<actions only>, confirm=true)` — persist in VisualQ; optional `requiresAuth`, `startPath`, `name`, `featureId`.
+4. `run_frt_feature` if they asked to test.
 
-Forbidden: copy-paste `.feature` text, parameter tables, "commande MCP", "dis-moi si tu veux que je pousse".
-- Tracking → `tracking_get_plan` before linking events to FRT steps
+Forbidden: copy-paste `.feature` text, parameter tables, "commande MCP", "dis-moi si tu veux que je pousse", inventing `frt_save_feature_draft` (not in the QA catalog).

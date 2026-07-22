@@ -1,7 +1,7 @@
 {
   "name": "visualq",
-  "description": "Quality MCP for Claude Code — VRT, FRT, rolling health, PR gates",
-  "version": "1.0.0",
+  "description": "Quality MCP for Claude Code — VRT, FRT, tracking proof, rolling health, PR gates",
+  "version": "1.1.0",
   "author": {
     "name": "VisualQ"
   },
@@ -12,7 +12,8 @@
       "env": {
         "VISUALQ_API_KEY": "${userConfig.apiKey}",
         "VISUALQ_BASE_URL": "https://visualq.ai",
-        "VISUALQ_TOOL_PROFILE": "vrt-qa"
+        "VISUALQ_DEFAULT_PROJECT": "${userConfig.defaultProject}",
+        "VISUALQ_TOOL_PROFILE": "${userConfig.toolProfile}"
       }
     }
   },
@@ -28,6 +29,13 @@
       "title": "Default project slug",
       "description": "Optional — passed as VISUALQ_DEFAULT_PROJECT",
       "required": false
+    },
+    "toolProfile": {
+      "type": "string",
+      "title": "Tool profile",
+      "description": "vrt-qa (default), frt-qa, tracking-qa, or full",
+      "required": false,
+      "default": "vrt-qa"
     }
   }
 }

@@ -22,19 +22,19 @@ For a bug ticket (e.g. BN-448 account tabs, BN-470 rail click):
 
 1. Read the ticket via JIRA MCP and build an **action-only** `reproGoal`.
 2. `tracking_prove_jira_ticket` with `confirm: true` — **one call** (async). Poll `get_job_status` until completed.
-3. If `proofContract.mayClaimTicketFixed`:
+3. If `proofVerdict` is `proven` **and** `proofContract.mayClaimTicketFixed`:
    - `jira_add_comment` with `result.jiraMarkdown` **verbatim**
-4. If **NOT** proven — **investigation ladder** (do **not** run `run_full_audit`):
-   - Read `investigationLadder` from the tool response
-   - `frt_get_feature(featureId, ticketId, reproGoal)` — analyze Gherkin + `scenarioCoverageAnalysis`
-   - If still inconclusive: propose **manual recette on the live site** (`human_handoff` steps)
+4. If **NOT** proven — say **NON** (quote `proofOutcome.headline`). Follow `investigationLadder`:
+   - Step 1: identify scenario (`data.scenario` or `frt_find_scenarios` read-only)
+   - Step 2: `frt_get_feature(featureId, ticketId)` — Gherkin + `scenarioCoverageAnalysis`
+   - Step 3: propose **manual recette on the live site** (`human_handoff`) — do **not** run `run_full_audit`
 
 ## Forbidden for JIRA proof
 
 - `run_full_audit`, global scores (757/757), `gate_pr_quality`, `get_site_health` as ticket proof
-- Initial chain: `frt_find_scenarios` → `run_frt_feature` → `run_full_audit`
+- Initial chain: `frt_find_scenarios` → `create_frt_scenario` → `run_frt_feature` → `run_full_audit`
 - Reading app source to infer payloads
-- JIRA comment « corrigé » or RECETTE without `proofVerdict: proven`
+- JIRA comment « corrigé » or RECETTE without `proofVerdict: proven` + `mayClaimTicketFixed`
 
 ## Allowed after failed prove (read-only)
 
@@ -53,10 +53,11 @@ For a bug ticket (e.g. BN-448 account tabs, BN-470 rail click):
 ## Review site-wide coverage (not JIRA ticket proof)
 
 1. `tracking_get_plan` — overview
-2. `tracking_list_events` — find uncovered events
+2. `tracking_discover_from_pages` / plan tools — find uncovered events
 3. `tracking_get_audit_report` — SITE-WIDE scores only
+4. Optional: `run_full_audit` with `pillars: ["tracking"]` then `wait_for_run`
 
 ## Prompts
 
 - `jira-tracking-proof` — initial prove
-- `jira-tracking-proof-investigate` — after failed prove
+- `diagnose-tracking-audit` — site-wide coverage review

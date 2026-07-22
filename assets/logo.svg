@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="VisualQ">
+  <defs>
+    <mask id="vq-v-cutout">
+      <rect width="64" height="64" fill="white" />
+      <path d="M 19.04 24.46 L 31.86 26.45 L 44.09 24.46 L 31.57 46.36 Z" fill="black" />
+    </mask>
+  </defs>
+  <circle cx="32" cy="32" r="28.75" fill="#000000" mask="url(#vq-v-cutout)" />
+</svg>

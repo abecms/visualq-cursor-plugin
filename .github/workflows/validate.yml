@@ -24,5 +24,13 @@ jobs:
             grep -q '^name:' "$f" || (echo "Missing name in $f" && exit 1)
           done
 
-      - name: Check MCP template has placeholder key
-        run: grep -q 'vq_org_live_YOUR_KEY_HERE' mcp.json
+      - name: Check MCP uses marketplace variables (no committed secrets)
+        run: |
+          grep -q '\${VISUALQ_API_KEY}' mcp.json
+          ! grep -qE 'vq_org_live_[A-Za-z0-9]' mcp.json
+
+      - name: Check logo assets
+        run: test -f assets/logo.svg && test -f assets/logo.png
+
+      - name: Check displayName VisualQ
+        run: grep -q '"displayName": "VisualQ"' .cursor-plugin/plugin.json

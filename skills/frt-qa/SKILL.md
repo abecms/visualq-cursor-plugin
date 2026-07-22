@@ -16,19 +16,22 @@ Set `VISUALQ_TOOL_PROFILE=frt-qa` on the MCP server for a focused FRT toolset.
 When the user asks to create/make an FRT scenario or feature (with MCP, in VisualQ, in Cursor):
 
 1. **Call MCP immediately** — first tool call, not chat output.
-2. `frt_search_step_library` — reuse canonical step patterns.
-3. Optional: `frt_inspect_page` / `frt_resolve_page` to ground labels and selectors.
-4. `frt_save_feature_draft` with `confirm: true` — pass `project`, `name`, `gherkin`, `baseUrl`, `environment`.
-5. `frt_compile_feature` with `project` + `featureId`.
-6. `run_frt_feature` with `confirm: true` if they asked to run or test.
+2. `frt_find_scenarios(query=<goal>)` — reuse `featureId` when `matchScore >= 0.85` or same ticket id (BN-XXX).
+3. Optional: `frt_search_step_library` / `frt_inspect_page` to ground labels and selectors.
+4. `create_frt_scenario(goal=<actions only>, confirm=true)` — update via `featureId` when a ticket scenario exists; never `forceCreate` duplicates.
+5. Authenticated flows: say "logged in" / pass `requiresAuth: true` — MCP sets Requires authentication + LOGIN preamble. Do **not** put sign-in steps in the goal.
+6. Optional: `startPath` (e.g. `/profile`), `name`. Gherkin: one `When` per scenario; chain further actions with `And`.
+7. `run_frt_feature` with `confirm: true` if they asked to run or test.
 
-**Never** output Gherkin for copy-paste, import tables, or "commande MCP" instructions. Saving in VisualQ is the deliverable.
+**Never** output Gherkin for copy-paste, import tables, or "commande MCP" instructions. `create_frt_scenario` persists the feature in VisualQ.
+
+Do **not** put tracking payload verification in the goal — use `tracking_prove_jira_ticket` for JIRA proof.
 
 ## Conventions
 
 1. Always pass `project` on every tool.
-2. Mutations need `confirm: true` (`frt_save_feature_draft`, `run_frt_feature`, `frt_heal_step_def`).
-3. Async tools (`frt_propose_journey`) → poll `get_job_status`.
+2. Mutations need `confirm: true` (`create_frt_scenario`, `run_frt_feature`, `frt_heal_step_def`).
+3. Async tools → poll `get_job_status`.
 
 ## No repair at runtime
 
@@ -39,5 +42,9 @@ When the user asks to create/make an FRT scenario or feature (with MCP, in Visua
 ## Debug failure
 
 1. `frt_explain_failure` with runId / step index
-2. `frt_get_step_def` — inspect persisted body
+2. `frt_get_feature` — inspect persisted Gherkin / coverage
 3. `frt_inspect_page` if DOM/selector issue
+
+## Prompts
+
+- `frt-journey-from-goal` — create from plain language

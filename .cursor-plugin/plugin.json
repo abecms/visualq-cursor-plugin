@@ -1,13 +1,47 @@
 {
   "name": "visualq",
-  "description": "Quality MCP for coding agents — VRT, FRT, rolling health, PR gates",
-  "version": "1.0.0",
+  "displayName": "VisualQ",
+  "description": "Quality OS for coding agents — VRT, FRT, tracking proof, rolling health, PR gates via @visualq/mcp",
+  "version": "1.1.0",
   "author": {
     "name": "VisualQ",
     "email": "support@visualq.ai"
   },
-  "keywords": ["qa", "vrt", "mcp", "testing", "visual-regression", "frt"],
+  "keywords": [
+    "qa",
+    "vrt",
+    "mcp",
+    "testing",
+    "visual-regression",
+    "frt",
+    "tracking",
+    "quality"
+  ],
   "homepage": "https://visualq.ai/docs/integrations/mcp",
   "repository": "https://github.com/abecms/visualq-cursor-plugin",
-  "license": "MIT"
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "VISUALQ_API_KEY": {
+        "type": "string",
+        "title": "VisualQ Org Agent API Key",
+        "description": "Create at visualq.ai → Settings → Agent API Keys (vq_org_live_…, mcp_full scope)"
+      },
+      "VISUALQ_DEFAULT_PROJECT": {
+        "type": "string",
+        "title": "Default project slug",
+        "description": "Optional — passed as VISUALQ_DEFAULT_PROJECT so tools inherit the project"
+      },
+      "VISUALQ_TOOL_PROFILE": {
+        "type": "string",
+        "title": "Tool profile",
+        "description": "vrt-qa (default), frt-qa, tracking-qa, or full",
+        "enum": ["vrt-qa", "frt-qa", "tracking-qa", "full"],
+        "default": "vrt-qa"
+      }
+    },
+    "required": ["VISUALQ_API_KEY"]
+  }
 }
